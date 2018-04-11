@@ -10,7 +10,7 @@
 #include <signal.h>
 #include "smsh.h"
 
-#define	DFL_PROMPT	"> "
+#define	DFL_PROMPT	"The Best Shell> "
 
 int main()
 {
