@@ -8,9 +8,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <string.h>
 #include "smsh.h"
 
-#define	DFL_PROMPT	"The Best Shell> "
+#define	DFL_PROMPT	"The Best Shell > "
 
 int main()
 {
@@ -23,6 +24,9 @@ int main()
 
   while ( (cmdline = next_cmd(prompt, stdin)) != NULL ){
     if ( (arglist = splitline(cmdline)) != NULL  ){
+      if( strcmp("exit", arglist[0]) == 0){
+        return 0;
+      }
       result = execute(arglist);
       freelist(arglist);
     }
