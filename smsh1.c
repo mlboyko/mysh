@@ -25,8 +25,9 @@ int main()
   while ( (cmdline = next_cmd(prompt, stdin)) != NULL ){
     if ( (arglist = splitline(cmdline)) != NULL  ){
       if( strcmp("exit", arglist[0]) == 0){
-        if(sizeof(arglist) > 1)
+        if( arglist[1] != NULL) {
             return atoi(arglist[1]);
+        }
         return 0;
       }
       result = execute(arglist);
