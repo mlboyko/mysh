@@ -9,12 +9,17 @@
 #include <unistd.h>
 #include <signal.h>
 #include <string.h>
+#include <sys/types.h>
+#include <pwd.h>
 #include "smsh.h"
 
 #define	DFL_PROMPT	"The Best Shell > "
 
 int main()
 {
+  struct passwd *pw = getpwuid(getuid());
+  const char *homedir = pw->pw_dir;
+
   char	*cmdline, *prompt, **arglist;
   int	result;
   void	setup();
@@ -34,7 +39,7 @@ int main()
         if (arglist[1] != NULL){
             chdir(arglist[1]);
         }else{
-            printf("No directory Specified\n");
+            chdir(homedir);
         }
       }else{
         result = execute(arglist);
