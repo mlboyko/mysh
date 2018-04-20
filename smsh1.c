@@ -30,8 +30,16 @@ int main()
         }
         return 0;
       }
-      result = execute(arglist);
-      freelist(arglist);
+      if( strcmp("cd", arglist[0]) == 0 ){
+        if (arglist[1] != NULL){
+            chdir(arglist[1]);
+        }else{
+            printf("No directory Specified\n");
+        }
+      }else{
+        result = execute(arglist);
+        freelist(arglist);
+      }
     }
     free(cmdline);
   }
