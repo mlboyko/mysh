@@ -41,6 +41,8 @@ int main()
         }else{
             chdir(homedir);
         }
+      }else if ( strcmp("&", arglist[2]) == 0){
+        printf("should background a proccess here\n");
       }else{
         result = execute(arglist);
         freelist(arglist);
