@@ -22,6 +22,7 @@ int main()
 
   char	*cmdline, *prompt, **arglist;
   int	result;
+  int argLength;
   void	setup();
 
   prompt = DFL_PROMPT ;
@@ -29,6 +30,14 @@ int main()
 
   while ( (cmdline = next_cmd(prompt, stdin)) != NULL ){
     if ( (arglist = splitline(cmdline)) != NULL  ){
+
+      // Gets length of arglist
+      argLength = 0;
+      while(arglist[argLength] != NULL){
+         argLength++;
+      }
+      argLength--;
+
       if( strcmp("exit", arglist[0]) == 0){
         if( arglist[1] != NULL) {
             return atoi(arglist[1]);
@@ -41,8 +50,16 @@ int main()
         }else{
             chdir(homedir);
         }
-      }else if ( strcmp("&", arglist[2]) == 0){
-        printf("should background a proccess here");
+      }else if ( strcmp("&", arglist[argLength]) == 0){
+        arglist[argLength] = NULL;
+        int pid = fork();
+        if (pid < 0) exit(-1);
+        if (pid){ // child
+           execute(arglist);
+           break;
+        }else{
+           freelist(arglist);
+        }
       }else{
         result = execute(arglist);
         freelist(arglist);
