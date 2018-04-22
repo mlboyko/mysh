@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <string.h>
 #include <sys/wait.h>
 
 int execute(char *argv[])
@@ -15,6 +16,17 @@ int execute(char *argv[])
 {
   int	pid ;
   int	child_info = -1;
+  int   background = -1;
+
+   // Gets length of arglist
+   int argLength = 0;
+   while(argv[argLength] != NULL){
+      argLength++;
+   }
+   argLength--;
+   if(background = strcmp("&", argv[argLength]) == 0){
+      argv[argLength] = NULL;
+   }
 
   if ( argv[0] == NULL )		/* nothing succeeds	*/
     return 0;
@@ -29,7 +41,10 @@ int execute(char *argv[])
     exit(1);
   }
   else {
-    if ( wait(&child_info) == -1 )
+    if(background){
+      printf("Started process %d.\n", pid);
+    }
+    else if ( wait(&child_info) == -1 )
       perror("wait");
   }
   return child_info;
