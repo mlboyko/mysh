@@ -30,7 +30,7 @@ int execute(char *argv[])
 
   //Checks if last argument is background flag
   if(background = strcmp("&", argv[args - 1]) == 0){
-      argv[args] = NULL;
+      argv[args - 1] = NULL;
   }
 
   //Fork process
