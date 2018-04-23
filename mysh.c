@@ -10,10 +10,12 @@
 #include <signal.h>
 #include <string.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <pwd.h>
 #include "smsh.h"
 
 #define	DFL_PROMPT	"The Best Shell > "
+#define MAX_BG_PROCESSES 100
 
 int main()
 {
@@ -21,30 +23,78 @@ int main()
   const char *homedir = pw->pw_dir;
 
   char	*cmdline, *prompt, **arglist;
+  int bgPIDs [MAX_BG_PROCESSES];
   int	result;
-  int argLength;
+  int background;
+  int bgPIDCount = 0;
   void	setup();
 
   prompt = DFL_PROMPT ;
   setup();
 
-  while ( (cmdline = next_cmd(prompt, stdin)) != NULL ){
-    if ( (arglist = splitline(cmdline)) != NULL  ){
-      if( strcmp("exit", arglist[0]) == 0){
-        if( arglist[1] != NULL) {
-            return atoi(arglist[1]);
-        }
+  //Get the next line
+  while ((cmdline = next_cmd(prompt, stdin)) != NULL){
+
+    //Split the line into tokens (arglist)
+    if ((arglist = splitline(cmdline)) != NULL){
+
+      //Do nothing, avoid segmentation fault from strcmp on null string
+      if(arglist[0] == NULL){
+      }
+
+      //Exit
+      else if (strcmp("exit", arglist[0]) == 0){
+        if(arglist[1] != NULL)
+          return atoi(arglist[1]);
+
         return 0;
       }
-      if( strcmp("cd", arglist[0]) == 0 ){
-        if (arglist[1] != NULL){
-            chdir(arglist[1]);
-        }else{
-            chdir(homedir);
-        }
-      }else{
+
+      //Change Directory
+      else if(strcmp("cd", arglist[0]) == 0){
+
+        if (arglist[1] != NULL)
+          chdir(arglist[1]);
+        else
+          chdir(homedir);
+      }
+
+      //Execute a different command
+      else if(arglist[0] != NULL){
         result = execute(arglist);
         freelist(arglist);
+
+        //If background process, store PID
+        if(result > 0){
+          bgPIDs[bgPIDCount] = result;
+          bgPIDCount++;
+        }
+      }
+    }
+
+
+    int i = 0, status;
+
+    //Iterate through PIDs of every background process
+    while(i < bgPIDCount){
+
+      //If process has returned
+      if (waitpid(bgPIDs[i], &status, WNOHANG) > 0){
+
+        //Notify user
+        printf("Background process %d complete.\n", bgPIDs[i]);
+        printf("There are this many bgProcesses: %d\n", bgPIDCount - 1);
+
+        //Shift array of background PIDs to the left to fill gap
+        for (int k = i; k < bgPIDCount - 2; k--){
+          bgPIDs[k] = bgPIDs[k + 1];
+          printf("Success!\n");
+        }
+
+        bgPIDCount--;
+  
+      }else{
+        i++;
       }
     }
     free(cmdline);
