@@ -1,7 +1,7 @@
-/**  smsh1.c  small-shell version 1
- **		first really useful version after prompting shell
- **		this one parses the command line into strings
- **		uses fork, exec, wait, and ignores signals
+/**  COS 350 Program 5 - mysh.c
+ **   Nick Johnston
+ **		Justin O'Malley
+ **   Makayla Boyko 
  **/
 
 #include <stdio.h>
@@ -15,7 +15,8 @@
 #include "smsh.h"
 
 #define	DFL_PROMPT	"The Best Shell > "
-#define MAX_BG_PROCESSES 100
+
+void setup();
 
 int main()
 {
@@ -23,13 +24,8 @@ int main()
   const char *homedir = pw->pw_dir;
 
   char	*cmdline, *prompt, **arglist;
-  int bgPIDs [MAX_BG_PROCESSES];
-  int	result;
-  int background;
-  int bgPIDCount = 0;
-  void	setup();
 
-  prompt = DFL_PROMPT ;
+  prompt = DFL_PROMPT;
   setup();
 
   //Get the next line
@@ -61,21 +57,15 @@ int main()
 
       //Execute a different command
       else if(arglist[0] != NULL){
-        result = execute(arglist);
+        int result = execute(arglist);
         freelist(arglist);
-
-        //If background process, store PID
-        if(result > 0){
-          bgPIDs[bgPIDCount] = result;
-          bgPIDCount++;
-        }
       }
     }
 
 
     int status, pid;
 
-    //Notify user of finished child processes
+    //Notify user of all finished child processes
     while((pid = waitpid(0, &status, WNOHANG)) > 0)
       printf("Background process %d complete.\n", pid);
 
