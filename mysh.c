@@ -73,32 +73,15 @@ int main()
     }
 
 
-    int i = 0, status;
+    int status, pid;
 
-    //Iterate through PIDs of every background process
-    while(i < bgPIDCount){
+    //Notify user of finished child processes
+    while((pid = waitpid(0, &status, WNOHANG)) > 0)
+      printf("Background process %d complete.\n", pid);
 
-      //If process has returned
-      if (waitpid(bgPIDs[i], &status, WNOHANG) > 0){
-
-        //Notify user
-        printf("Background process %d complete.\n", bgPIDs[i]);
-        printf("There are this many bgProcesses: %d\n", bgPIDCount - 1);
-
-        //Shift array of background PIDs to the left to fill gap
-        for (int k = i; k < bgPIDCount - 2; k--){
-          bgPIDs[k] = bgPIDs[k + 1];
-          printf("Success!\n");
-        }
-
-        bgPIDCount--;
-  
-      }else{
-        i++;
-      }
-    }
     free(cmdline);
   }
+
   return 0;
 }
 
