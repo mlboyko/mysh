@@ -1,5 +1,5 @@
 #
-# makefile for mysh
+# Makefile for mysh
 #
 CC=gcc
 CFLAGS=-g
