@@ -1,0 +1,54 @@
+Script started on Mon 23 Apr 2018 06:15:55 AM EDT
+]0;omalley@honeybee: ~/Desktop/COS 350/program 5/myshomalley@honeybee:~/Desktop/COS 350/program 5/mysh$ mysh
+The Best Shell > ls
+execute.c  Makefile  mysh.c  smsh.h	  splitline.o
+execute.o  mysh      mysh.o  splitline.c  typescript
+The Best Shell > date
+Mon Apr 23 06:16:01 EDT 2018
+The Best Shell > bogus
+cannot execute command: No such file or directory
+The Best Shell > exit
+]0;omalley@honeybee: ~/Desktop/COS 350/program 5/myshomalley@honeybee:~/Desktop/COS 350/program 5/mysh$ mysh
+The Best Shell > exit 7
+]0;omalley@honeybee: ~/Desktop/COS 350/program 5/myshomalley@honeybee:~/Desktop/COS 350/program 5/mysh$ echo $?
+7
+]0;omalley@honeybee: ~/Desktop/COS 350/program 5/myshomalley@honeybee:~/Desktop/COS 350/program 5/mysh$ mysh
+The Best Shell > pwd
+/homenfs/students/omalley/Desktop/COS 350/program 5/mysh
+The Best Shell > cd ..
+The Best Shell > pwd
+/homenfs/students/omalley/Desktop/COS 350/program 5
+The Best Shell > cd usr   /s usr/bin
+The Best Shell > pwd
+/usr/bin
+The Best Shell > cd bogus
+The Best Shell > pwd
+/usr/bin
+The Best Shell > cd
+The Best Shell > pwd
+/homenfs/students/omalley
+The Best Shell > sleep 10 &
+Started process 25703.
+The Best Shell > ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S 21685 25666 25665  0  80   0 -  3602 wait   pts/4    00:00:00 bash
+0 S 21685 25684 25666  0  80   0 -  1142 wait   pts/4    00:00:00 mysh
+0 S 21685 25703 25684  0  80   0 -  1822 hrtime pts/4    00:00:00 sleep
+0 R 21685 25704 25684  0  80   0 -  7229 -      pts/4    00:00:00 ps
+The Best Shell > ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S 21685 25666 25665  0  80   0 -  3602 wait   pts/4    00:00:00 bash
+0 S 21685 25684 25666  0  80   0 -  1142 wait   pts/4    00:00:00 mysh
+0 Z 21685 25703 25684  0  80   0 -     0 exit   pts/4    00:00:00 sleep <defunct>
+0 R 21685 25709 25684  0  80   0 -  7229 -      pts/4    00:00:00 ps
+Background process 25703 complete.
+The Best Shell > ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S 21685 25666 25665  0  80   0 -  3602 wait   pts/4    00:00:00 bash
+0 S 21685 25684 25666  0  80   0 -  1142 wait   pts/4    00:00:00 mysh
+0 R 21685 25710 25684  0  80   0 -  7229 -      pts/4    00:00:00 ps
+The Best Shell > exit
+]0;omalley@honeybee: ~/Desktop/COS 350/program 5/myshomalley@honeybee:~/Desktop/COS 350/program 5/mysh$ exit
+exit
+
+Script done on Mon 23 Apr 2018 06:17:46 AM EDT
